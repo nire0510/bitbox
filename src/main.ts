@@ -1,3 +1,4 @@
 import Bitbox, { StorageType } from './bitbox';
 
-export { Bitbox, StorageType };
+export default Bitbox;
+export { StorageType };

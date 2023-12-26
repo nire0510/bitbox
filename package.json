@@ -2,7 +2,7 @@
   "name": "@nire0510/bitbox",
   "description": "A simple storage for your bits and bytes",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "files": ["dist"],
   "type": "module",
   "main": "./dist/bitbox.umd.cjs",

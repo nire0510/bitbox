@@ -282,6 +282,6 @@ class P {
   }
 }
 export {
-  P as Bitbox,
-  c as StorageType
+  c as StorageType,
+  P as default
 };

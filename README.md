@@ -1,5 +1,5 @@
 # Bitbox
-A simple storage for your bits and bytes.
+A simple storage for your browser based applications bits and bytes.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -45,8 +45,6 @@ import Bitbox from '@nire0510/bitbox';
 
 async function main() {
   const bitbox = new Bitbox();
-  // or set your options:
-  // const bitbox = new Bitbox({ ... });
 
   // add or modify a property:
   await bitbox.set('bla', { foo: 'bar', baz: 1 });
