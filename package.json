@@ -2,7 +2,7 @@
   "name": "@nire0510/bitbox",
   "description": "A simple storage for your bits and bytes",
   "private": false,
-  "version": "0.0.10",
+  "version": "0.0.11",
   "files": [
     "dist"
   ],
