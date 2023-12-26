@@ -1,0 +1,34 @@
+{
+  "name": "bitbox",
+  "description": "A simple storage for your bits and bytes",
+  "private": false,
+  "version": "0.0.1",
+  "files": ["dist"],
+  "type": "module",
+  "main": "./dist/bitbox.umd.cjs",
+  "module": "./dist/bitbox.js",
+  "exports": {
+    ".": {
+      "import": "./dist/bitbox.js",
+      "require": "./dist/bitbox.umd.cjs"
+    }
+  },
+  "author": {
+    "name": "Nir Elbaz"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "jsdom": "^23.0.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vitest": "^1.1.0"
+  }
+}
