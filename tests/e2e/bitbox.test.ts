@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from 'vitest';
-import { Bitbox, StorageType } from '../../src/main';
+import Bitbox, { StorageType } from '../../src/main';
 import wait from '../../src/utils/wait';
 
 describe('Bitbox', () => {
