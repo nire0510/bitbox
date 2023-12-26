@@ -85,23 +85,43 @@ None of the options above is mandatory. You may specify all, some or none of the
 
 ### Methods:  
 
-
-
 #### `clear(): Promise<void>`
+Remove all keys.  
+`await bitbox.clear();`  
 
 #### `delete(key:string): Promise<void>`
+Remove an existing key.  
+`await bitbox.delete('foo');`  
 
 #### `exists(key:string): Promise<boolean>`
+Check if a key already exists.  
+`const exists = await bitbox.exists('foo');`  
 
 #### `get(key:string): Promise<any>`
+Retrieve the value of a key.  
+`const value = await bitbox.get('foo');`  
 
 #### `keys: Promise<Array<string>>`
+Get all existing keys.  
+`const keys = await bitbox.keys;`  
 
-#### `set(key:string, value): Promise<void>`
+#### `set(key:string, value: any): Promise<void>`
+Add a new key or modify* an existing one.  
+(* if immutable option set to true, modifying an existing key will throw an error).  
+`await bitbox.set('foo', 'bar');`  
 
 #### `size: Promise<number>`
+Get the number of existing keys.  
+`const size = await bitbox.size;`  
 
 #### `subscribe(key:string, callback: Function): Promise<string>`
+Call a function every time a value of an existing key is changed;  
+```javascript
+const subscriptionId = await bitbox.subscribe('foo', (value) => {
+  console.log('foo value has just changed to', value);
+});
+```
 
 #### `unsubscribe(key:string, subscription: string): Promise<void>`
-
+Disable previous subscription and stop being notified on value changes.  
+`await bitbox.unsubscribe('foo', subscriptionId);`  
