@@ -101,7 +101,26 @@ Check if a key already exists.
 Retrieve the value of a key.  
 If a fallback is defined, it will be evaluated if it's a function and returned in case the key could not be found or has expired (note that it doesn't set the key's value).  
 If `retry` parameter is set (see [options](#options) section), it overrides the store's similar setting.  
-`const value = await bitbox.get('foo');`  
+```javascript
+// basic get:
+const value = await bitbox.get('foo');
+// get with fallback (variable):
+const value = await bitbox.get('foo', 'bar');
+// get with fallback (function):
+const value = await bitbox.get('foo', () => 'bar');
+// get with fallback (promise):
+const value = await bitbox.get('foo', () => new Promise((resolve) => window.setTimeout(() => 'bar', 5000)));
+// get with retry:
+const value = await bitbox.get('foo', undefined, {
+  interval: 1000,
+  attempts: 4,
+});
+// get with fallback & retry:
+const value = await bitbox.get('foo', 'bar', {
+  interval: 1000,
+  attempts: 4,
+});
+```
 
 #### `keys: Promise<Array<string>>`
 Get all existing keys.  
@@ -111,7 +130,12 @@ Get all existing keys.
 Add a new key or modify* an existing one.  
 (* if immutable option set to true, modifying an existing key will throw an error).  
 If `ttl` object is set (see [options](#options) section), it overrides the store's similar setting.  
-`await bitbox.set('foo', 'bar');`  
+```javascript
+// basic set:
+await bitbox.set('foo', 'bar');
+// set with 2 hours ttl:
+await bitbox.set('foo', 'bar', 1000 * 60 * 60 * 2);
+```
 
 #### `size: Promise<number>`
 Get the number of existing keys.  
