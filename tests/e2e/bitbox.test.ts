@@ -78,20 +78,31 @@ describe('Bitbox', () => {
         await bitbox.set('foo', 'bar');
         await wait(1000);
         expect(await bitbox.get('foo')).toBe('bar');
-        await wait(5000);
+        await wait(3000);
         expect(await bitbox.get('foo')).toBe('bar');
       });
 
       test('key should be undefined ttl is set', async () => {
         const bitbox = new Bitbox('default', {
-          ttl: 5000,
+          ttl: 3000,
         });
         
         await bitbox.set('foo', 'bar');
         expect(await bitbox.get('foo')).toBe('bar');
         await wait(1000);
         expect(await bitbox.get('foo')).toBe('bar');
-        await wait(5000);
+        await wait(3000);
+        expect(await bitbox.get('foo')).toBeUndefined();
+      });
+
+      test('key should be undefined ttl is set on method level', async () => {
+        const bitbox = new Bitbox('default');
+        
+        await bitbox.set('foo', 'bar', 2000);
+        expect(await bitbox.get('foo')).toBe('bar');
+        await wait(1000);
+        expect(await bitbox.get('foo')).toBe('bar');
+        await wait(2000);
         expect(await bitbox.get('foo')).toBeUndefined();
       });
     });
@@ -101,7 +112,7 @@ describe('Bitbox', () => {
         const bitbox = new Bitbox();
         
         expect(await bitbox.get('foo')).toBeUndefined();
-        await wait(5000);
+        await wait(3000);
         expect(await bitbox.get('foo')).toBeUndefined();
       });
 
@@ -109,7 +120,7 @@ describe('Bitbox', () => {
         const bitbox = new Bitbox('default', {
           retry: {
             interval: 1000,
-            attempts: 5,
+            attempts: 4,
           },
         });
         
@@ -117,6 +128,19 @@ describe('Bitbox', () => {
           await bitbox.set('foo', 'bar');
         }, 3000);
         expect(await bitbox.get('foo')).toBe('bar');
+      });
+
+      test('value should return if key is not set initially but the retry is set on method level', async () => {
+        const bitbox = new Bitbox('default');
+        
+        setTimeout(async () => {
+          await bitbox.set('foo', 'bar');
+        }, 3000);
+
+        expect(await bitbox.get('foo', undefined, {
+          interval: 1000,
+          attempts: 3,
+        })).toBe('bar');
       });
 
       test('value should be undefined if key is not set initially, the retry is set but for shorter time', async () => {
@@ -132,6 +156,32 @@ describe('Bitbox', () => {
         }, 5000);
         expect(await bitbox.get('foo')).toBeUndefined();
       });
+    });
+  });
+
+  describe('get fallback', () => {
+    test('value should be undefined if key is not set and fallback is not set', async () => {
+      const bitbox = new Bitbox();
+      
+      expect(await bitbox.get('foo')).toBeUndefined();
+    });
+
+    test('value should be equal to fallback if key is not set and fallback is set', async () => {
+      const bitbox = new Bitbox();
+      
+      expect(await bitbox.get('foo', 'bar')).toBe('bar');
+    });
+
+    test('value should be equal to fallback if key is not set and fallback is a function', async () => {
+      const bitbox = new Bitbox();
+      
+      expect(await bitbox.get('foo', () => 'bar')).toBe('bar');
+    });
+
+    test('value should be equal to fallback if key is not set and fallback is a function which returns promise', async () => {
+      const bitbox = new Bitbox();
+      
+      expect(await bitbox.get('foo', () => { return new Promise((resolve) => setTimeout(() => resolve('bar'), 2000))})).toBe('bar');
     });
   });
 

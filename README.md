@@ -97,17 +97,20 @@ Remove an existing key.
 Check if a key already exists.  
 `const exists = await bitbox.exists('foo');`  
 
-#### `get(key:string): Promise<any>`
+#### `get(key:string, fallback?:any, retry?:Retry): Promise<any>`
 Retrieve the value of a key.  
+If a fallback is defined, it will be evaluated if it's a function and returned in case the key could not be found or has expired (note that it doesn't set the key's value).  
+If `retry` parameter is set (see [options](#options) section), it overrides the store's similar setting.  
 `const value = await bitbox.get('foo');`  
 
 #### `keys: Promise<Array<string>>`
 Get all existing keys.  
 `const keys = await bitbox.keys;`  
 
-#### `set(key:string, value: any): Promise<void>`
+#### `set(key:string, value:any, ttl?:number): Promise<void>`
 Add a new key or modify* an existing one.  
 (* if immutable option set to true, modifying an existing key will throw an error).  
+If `ttl` object is set (see [options](#options) section), it overrides the store's similar setting.  
 `await bitbox.set('foo', 'bar');`  
 
 #### `size: Promise<number>`

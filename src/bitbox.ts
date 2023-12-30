@@ -45,7 +45,7 @@ export default class Bitbox {
     return this.store.exists(key);
   }
 
-  async get(key:string, retry?: Retry): Promise<any> {
+  async get(key:string, fallback?: any, retry?: Retry): Promise<any> {
     let retries = 0;
     let value: unknown;
     let ttl: number;
@@ -59,6 +59,12 @@ export default class Bitbox {
     if (ttl && ttl < Date.now()) {
       await this.delete(key);
       return undefined;
+    }
+
+    if (!value && fallback) {
+      value = typeof fallback === 'function' ?
+        await Promise.resolve(fallback()) :
+        fallback;
     }
 
     return value;

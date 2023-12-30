@@ -1,9 +1,9 @@
 var m = Object.defineProperty;
 var g = (i, e, s) => e in i ? m(i, e, { enumerable: !0, configurable: !0, writable: !0, value: s }) : i[e] = s;
-var n = (i, e, s) => (g(i, typeof e != "symbol" ? e + "" : e, s), s);
+var a = (i, e, s) => (g(i, typeof e != "symbol" ? e + "" : e, s), s);
 class w {
   constructor() {
-    n(this, "subscribers");
+    a(this, "subscribers");
     this.subscribers = {};
   }
   generateId() {
@@ -27,8 +27,8 @@ class w {
 var c = /* @__PURE__ */ ((i) => (i[i.IndexedDB = 1] = "IndexedDB", i[i.LocalStorage = 2] = "LocalStorage", i[i.SessionStorage = 3] = "SessionStorage", i))(c || {});
 const u = class u {
   constructor(e) {
-    n(this, "dbname", "bitbox");
-    n(this, "namespace");
+    a(this, "dbname", "bitbox");
+    a(this, "namespace");
     this.namespace = e;
   }
   open(e) {
@@ -39,9 +39,9 @@ const u = class u {
       }, r.onsuccess = () => {
         s(r.result);
       }, r.onupgradeneeded = (o) => {
-        const a = o.target.result, h = a.createObjectStore(this.namespace, { keyPath: "key" });
+        const n = o.target.result, h = n.createObjectStore(this.namespace, { keyPath: "key" });
         h.transaction.oncomplete = () => {
-          s(a);
+          s(n);
         };
       };
     });
@@ -64,8 +64,8 @@ const u = class u {
       const o = (await this.db).transaction([this.namespace], "readwrite").objectStore(this.namespace).delete(e);
       o.onsuccess = () => {
         s();
-      }, o.onerror = (a) => {
-        t(a);
+      }, o.onerror = (n) => {
+        t(n);
       };
     });
   }
@@ -86,10 +86,10 @@ const u = class u {
     return new Promise(async (s, t) => {
       const o = (await this.db).transaction(this.namespace, "readonly").objectStore(this.namespace).get(e);
       o.onsuccess = () => {
-        var a;
-        s((a = o.result) == null ? void 0 : a.value);
-      }, o.onerror = (a) => {
-        t(a);
+        var n;
+        s((n = o.result) == null ? void 0 : n.value);
+      }, o.onerror = (n) => {
+        t(n);
       };
     });
   }
@@ -108,13 +108,13 @@ const u = class u {
   }
   set(e, s) {
     return new Promise(async (t, r) => {
-      const a = (await this.db).transaction([this.namespace], "readwrite").objectStore(this.namespace).put({
+      const n = (await this.db).transaction([this.namespace], "readwrite").objectStore(this.namespace).put({
         key: e,
         value: s
       });
-      a.onsuccess = () => {
+      n.onsuccess = () => {
         t();
-      }, a.onerror = (h) => {
+      }, n.onerror = (h) => {
         r(h);
       };
     });
@@ -130,12 +130,12 @@ const u = class u {
     });
   }
 };
-n(u, "indexedDB", window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB);
+a(u, "indexedDB", window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB);
 let d = u;
 class p {
   constructor(e, s) {
-    n(this, "namespace");
-    n(this, "storage");
+    a(this, "namespace");
+    a(this, "storage");
     this.namespace = e, this.storage = window[s];
   }
   clear() {
@@ -182,8 +182,8 @@ class l extends p {
 }
 class S {
   constructor(e, s = c.IndexedDB) {
-    n(this, "store");
-    n(this, "namespace");
+    a(this, "store");
+    a(this, "namespace");
     switch (this.namespace = e, !0) {
       case (s === c.IndexedDB && d.isSupported):
         console.log("IndexedDB is supported"), this.store = new d(this.namespace);
@@ -225,10 +225,10 @@ class S {
 const x = (i) => new Promise((e) => setTimeout(e, i));
 class P {
   constructor(e = "default", s = {}) {
-    n(this, "namespace");
-    n(this, "options");
-    n(this, "pubsub");
-    n(this, "store");
+    a(this, "namespace");
+    a(this, "options");
+    a(this, "pubsub");
+    a(this, "store");
     const t = {
       immutable: !1,
       retry: !1,
@@ -250,17 +250,17 @@ class P {
   exists(e) {
     return this.store.exists(e);
   }
-  async get(e, s) {
-    let t = 0, r, o;
-    s = s || this.options.retry;
+  async get(e, s, t) {
+    let r = 0, o, n;
+    t = t || this.options.retry;
     do
-      t > 0 && await x(s.interval), { value: r, ttl: o } = await this.store.get(e) || {};
-    while (!r && s && s.attempts > t++);
-    if (o && o < Date.now()) {
+      r > 0 && await x(t.interval), { value: o, ttl: n } = await this.store.get(e) || {};
+    while (!o && t && t.attempts > r++);
+    if (n && n < Date.now()) {
       await this.delete(e);
       return;
     }
-    return r;
+    return !o && s && (o = typeof s == "function" ? await Promise.resolve(s()) : s), o;
   }
   get keys() {
     return this.store.keys;
